@@ -11,7 +11,6 @@ export class Login extends Component {
   constructor(props)
   {
     super(props);
-    console.log(props);
   }
 
   static navigationOptions = {
@@ -31,7 +30,7 @@ export class Login extends Component {
         <Logo />
         <LoginForm
         signUpPress={() => this.props.navigation.navigate('SignUp')}
-        goToHomeScreen={() => this.props.navigation.navigate('MainNavigator')}
+        goToHomeScreen={(data) => this.props.navigation.navigate('Main',{data})}
         forgetPasswordPress={() => this.props.navigation.navigate('ForgotPassword')} />
       </View >
     )

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { ProgressBarAndroid, StyleSheet, Text, Button, View, TextInput, TouchableOpacity,
   ToastAndroid,
   KeyboardAvoidingView,
-  Platform
+  Platform,
+  Alert
 } from 'react-native';
 import { Logo } from './LogoComponent';
 import { connect } from 'react-redux';
@@ -34,7 +35,6 @@ class LoginForm extends Component {
       username:"",
       password:""
     }
-    console.log(props);
   }
 
   ProcessLoginAsync() {
@@ -53,10 +53,17 @@ class LoginForm extends Component {
       hit = this.props.processLogin(username,password);
     }
   }
-  componentWillUpdate(){
-    return true;
+  componentDidUpdate(){
+    if(this.props.loginDetails.inProcess !== true && this.props.loginDetails.isLoggedIn === true)
+    {
+      //// TODO: GOTO My Products Page
+      ToastAndroid.show(this.props.loginDetails.msg, ToastAndroid.SHORT);
+      console.log("This is Props after successfull login" , this.props.loginDetails.data.owner_name)
+      this.props.goToHomeScreen(this.props.loginDetails);
+    }
+    
   }
-
+  
   render() {
     console.log(this.props);
     let processingView = <View/>;
@@ -64,14 +71,8 @@ class LoginForm extends Component {
     {
       processingView = <Loader msg="Signing In..."/>
     }
-    else if(this.props.loginDetails.inProcess !== true && this.props.loginDetails.isLoggedIn === true)
-    {
-      //// TODO: GOTO My Products Page
-      ToastAndroid.show(this.props.loginDetails.msg, ToastAndroid.SHORT);
-      this.props.goToHomeScreen();
-    }
     else if(this.props.loginDetails.inProcess !== true && this.props.loginDetails.isLoggedIn === false){
-      ToastAndroid.show(this.props.loginDetails.msg, ToastAndroid.SHORT);
+      {Platform.OS==="android" ? ToastAndroid.show(this.props.loginDetails.msg, ToastAndroid.SHORT) : Alert.alert("Message",this.props.loginDetails.msg) }
     }
     return(
       

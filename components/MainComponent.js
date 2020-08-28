@@ -5,14 +5,17 @@ import { createAppContainer } from 'react-navigation';
 import { Login } from '../screens/Login';
 import { ForgotPassword } from '../screens/ForgotPassword';
 import { Signup } from '../screens/SignUp';
-import { MainNavigator } from './MainNavigator';
+import { Main } from './MainNavigator';
 
 export const MainComponent = createAppContainer(createStackNavigator(
   {
     Login: Login,
     SignUp:  Signup,
-    ForgotPassword: ForgotPassword,
-    MainNavigator: MainNavigator
+    ForgotPassword: ForgotPassword, 
+    Main:{screen:Main,
+      navigationOptions: {
+        headerShown: false,
+    },}         
   },
   {
     initialRouteName: 'Login'

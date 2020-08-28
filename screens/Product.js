@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {connect} from 'react-redux';
 
-export class Home extends Component {
+export class Product extends Component {
 
   constructor(props)
   {
@@ -11,7 +11,7 @@ export class Home extends Component {
   }
 
   static navigationOptions = {
-    title: 'Home',
+    title: 'Products',
     headerStyle: {
       backgroundColor:'rgba(52, 87, 85,1)',
     },
@@ -61,4 +61,4 @@ const mapDispatchToProps = (dispatch) => ({
 /**
 * Connect the component to the store and export it.
 */
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
+export default connect(mapStateToProps, mapDispatchToProps)(Product)
