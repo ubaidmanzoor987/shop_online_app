@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createAppContainer } from 'react-navigation';
 import { Login } from '../screens/Login';
 import { ForgotPassword } from '../screens/ForgotPassword';
+import {Logout} from '../screens/Logout';
 import { Signup } from '../screens/SignUp';
 import { Main } from './MainNavigator';
 
@@ -12,10 +13,11 @@ export const MainComponent = createAppContainer(createStackNavigator(
     Login: Login,
     SignUp:  Signup,
     ForgotPassword: ForgotPassword, 
+    Logout:Logout,
     Main:{screen:Main,
       navigationOptions: {
         headerShown: false,
-    },}         
+    },},         
   },
   {
     initialRouteName: 'Login'

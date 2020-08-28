@@ -32,6 +32,7 @@ export class SignUpForm extends Component {
 
   constructor(props)
   {
+    console.log("This is Sign Up Props" , props);
     super(props);
     this.state={
         user_name:"",
@@ -56,7 +57,7 @@ export class SignUpForm extends Component {
   }
   render() {
     console.log(this.props);
-    processingView = <View/>;
+    let processingView = <View/>;
     if(this.props.signUpDetails.inProcess === true)
     {
       processingView = <Loader msg="SigningUp...."/>
@@ -71,7 +72,7 @@ export class SignUpForm extends Component {
     }
     return(
       <KeyboardAwareScrollView style={styles.container}>
-       
+        {processingView}
         <TextInput style={styles.inputBox}
           underlineColorAndroid='rgba(0,0,0,0)'
           placeholder="User Name"
@@ -107,7 +108,7 @@ export class SignUpForm extends Component {
           keyboardType="number-pad"
           onSubmitEditing={()=> this.password.focus()}
           onChangeText={(owner_phone_no) => this.setState({owner_phone_no})}
-        />{processingView}
+        />
         <TextInput style={styles.inputBox}
           underlineColorAndroid='rgba(0,0,0,0)'
           placeholder="Shop Phone No"

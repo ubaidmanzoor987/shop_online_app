@@ -8,24 +8,9 @@ import { Product } from '../screens/Product';
 import {Icon} from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {Footer,Header,Container,Content,Right,Left,Button} from 'native-base';
-import {Animated} from 'react-native-reanimated';
+import {Logout} from '../screens/Logout';
 
-const MyHeader = (navigation) => {
-  return{
-      headerStyle : {
-          backgroundColor:'blue',
-      },
-      headertintColor:'#fff',
-      headerTitleStyle:{
-          color:"#fff"
-      },
-      
-  };
-}
-
-
-
-const HomeNavigator = createStackNavigator({
+const HomeNavigator = createAppContainer(createStackNavigator({
   Home:{
     screen:Home,
     navigationOptions: ({ navigation }) => (
@@ -38,7 +23,7 @@ const HomeNavigator = createStackNavigator({
   
 },{
   initialRouteName:"Home",
-});
+}));
 const ProductNavigator = createAppContainer(createStackNavigator({
   Product:{
     screen:Product,
@@ -54,6 +39,7 @@ const ProductNavigator = createAppContainer(createStackNavigator({
   initialRouteName:"Product",
 }));
 
+
 const CustomDrawerContentComponent = {
   initialRouteName: 'Home',
   drawerBackgroundColor: 'white',
@@ -61,7 +47,8 @@ const CustomDrawerContentComponent = {
   contentComponent: (props) => { 
    return (
    <Container>
-     <Header style={styles.drawerHeader} >
+     <Header style={styles.drawerHeader} androidStatusBarColor='black'>
+        <Button transparent onPress={()=>Alert.alert("this is touch")}>
         <View>
           <Image style={styles.drawerImage} source={require('../assets/logo.png')} />
         </View>
@@ -69,24 +56,31 @@ const CustomDrawerContentComponent = {
           <Text style={styles.drawerHeaderText} >{props.navigation.state.params.data.data.shop_name}</Text>
           <Text style={styles.drawerHeaderText1} >{props.navigation.state.params.data.data.owner_phone_no}</Text>
         </View>
+        </Button>
      </Header>
-     <Content>
         <ScrollView style={styles.container}> 
           <SafeAreaView>
             <DrawerItems {...props} />
           </SafeAreaView>
         </ScrollView>
-      </Content>
+     
      <Footer style={styles.footerContainer}>
-        <Button>
-          <FontAwesome icon={SolidIcons.signOutAltreact-native-fontawesome}></FontAwesome>
-        </Button>
+        <TouchableOpacity style={styles.footerTouchable} onPress={()=> {props.navigation.navigate('Logout')}}>
+          <Icon
+          name='sign-out'
+          type='font-awesome'            
+          size={24}
+          color="white"
+          />
+          <Text style={{color:"white",fontSize:17}}>Sign Out</Text>
+        </TouchableOpacity>
      </Footer>
    </Container>
-   
   )
   }
+  
 };
+
 export const Main = createAppContainer(createDrawerNavigator(
   {
     Home: 
@@ -125,31 +119,13 @@ export const Main = createAppContainer(createDrawerNavigator(
   CustomDrawerContentComponent
 ));
 
-export class Main1 extends Component {
-  constructor(props){
-    super(props);
-    
-    console.log("This is Props in main Screen")
-  }  
-  render() {
-    const { navigation } = this.props;
-    console.log("{navigation.state.params.data.data.shop_name}",navigation.state.params.data.data.shop_name);
-    return (
-      <View>
-              
-            </View>
-     
-    );
-  }
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   drawerHeader: {
     backgroundColor: 'rgba(52, 87, 85,1)',
-    height: 120,
+    height: 100,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -173,8 +149,11 @@ const styles = StyleSheet.create({
   },
   footerContainer:{
       backgroundColor: 'rgba(52, 87, 85,1)',
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'row',
+      alignContent:'center',
+      justifyContent:"center"
+  },
+  footerTouchable:{
+    flexDirection:"row",
+    marginTop:15
   }
 }); 

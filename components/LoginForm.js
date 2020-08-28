@@ -9,6 +9,7 @@ import { Logo } from './LogoComponent';
 import { connect } from 'react-redux';
 import { processLogin } from '../redux/actions/loginActionCreator';
 import {Loader} from './LoadingComponent';
+
 const mapStateToProps = (state) => {
   return {
     loginDetails: state.login
@@ -23,13 +24,14 @@ const mapDispatchToProps = (dispatch)=>{
       dispatch(processLogin(username, password));
     }
   }
-}
+} 
 
 
 class LoginForm extends Component {
 
 
   constructor(props){
+    console.log("props of login screen", props);
     super(props);
     this.state = {
       username:"",
@@ -38,11 +40,17 @@ class LoginForm extends Component {
   }
 
   ProcessLoginAsync() {
-    console.log("process login asunc called");
     let username = this.state.username;
     let password = this.state.password;
-    console.log(username,password);
+    if (!username){
+      ToastAndroid.show("User Name Not Found",ToastAndroid.SHORT);
+    }
+    else if (!password){
+      ToastAndroid.show("Please Enter Password",ToastAndroid.SHORT);
+    }
+    else{
     this.props.processLogin(username,password);
+    }
   }
 
   componentDidMount(){
@@ -65,7 +73,7 @@ class LoginForm extends Component {
   }
   
   render() {
-    console.log(this.props);
+    console.log("Main" , this.props);
     let processingView = <View/>;
     if(this.props.loginDetails.inProcess === true)
     {
@@ -82,10 +90,9 @@ class LoginForm extends Component {
           {processingView} 
           <TextInput style={styles.inputBox}
             underlineColorAndroid='rgba(0,0,0,0)'
-            placeholder="Shop Name"
+            placeholder="User Name"
             placeholderTextColor = "#ffffff"
             selectionColor="#fff"
-            keyboardType="email-address"
             onSubmitEditing={()=> this.password.focus()}
             onChangeText={(username)=>{this.setState({username:username})}}
           />

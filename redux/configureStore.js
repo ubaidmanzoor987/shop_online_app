@@ -4,7 +4,7 @@ import  logger  from 'redux-logger';
 import { login } from "./reducers/loginReducer";
 import { signup } from "./reducers/signupReducer";
 import { forgetPassword } from "./reducers/forgetPasswordReducer";
-//import { products } from "./actions/productsActionCreator";
+import { logout } from "./reducers/logoutReducer";
 
 
 export const ConfigureStore = () => {
@@ -12,7 +12,8 @@ export const ConfigureStore = () => {
     combineReducers({
       login,
       signup,
-      forgetPassword
+      forgetPassword,
+      logout
     }),
     applyMiddleware(thunk.default,logger)
   );

@@ -7,7 +7,7 @@ export class Home extends Component {
   constructor(props)
   {
     super(props);
-    console.log("This is Home Screen Props", props);
+    //console.log("This is Home Screen Props", props);
   }
 
   static navigationOptions = {

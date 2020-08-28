@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import {ConfigureStore} from './redux/configureStore';
 import {Main} from './components/MainNavigator';
 const store = ConfigureStore();
+import { StyleSheet, SafeAreaView } from 'react-native';
+import AppStatusBar from './components/AppStatusBar';
 
 export default class App extends React.Component {
   render() {
@@ -15,3 +17,13 @@ export default class App extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  topSafeArea: {
+      flex: 0, 
+  }, 
+  bottomSafeArea: {
+      flex: 1, 
+      
+  },
+});
