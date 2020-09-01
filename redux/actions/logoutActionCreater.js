@@ -5,7 +5,7 @@ export const LOGOUT_PROCESSED = "LOGOUT_PROCESSED";
 export const LOGOUT_FAILED = "LOGOUT_FAILED";
 export const LOGOUT_REFRESH = "LOGOUT_REFRESH";
 
-export const processLogout = (dispatch) => {
+export const processLogout = (a) => (dispatch) => {
   
   dispatch({
     type: LOGOUT_PROCESSNG,

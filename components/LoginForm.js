@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { ProgressBarAndroid, StyleSheet, Text, Button, View, TextInput, TouchableOpacity,
+import { ProgressBarAndroid, StyleSheet, Text, View, TextInput, TouchableOpacity,
   ToastAndroid,
   KeyboardAvoidingView,
   Platform,
   Alert
 } from 'react-native';
-import { Logo } from './LogoComponent';
 import { connect } from 'react-redux';
 import { processLogin } from '../redux/actions/loginActionCreator';
 import {Loader} from './LoadingComponent';
@@ -25,28 +24,36 @@ const mapDispatchToProps = (dispatch)=>{
     }
   }
 } 
-
-
 class LoginForm extends Component {
 
 
   constructor(props){
-    console.log("props of login screen", props);
+    //console.log("props of login screen", props);
     super(props);
     this.state = {
       username:"",
       password:""
     }
+    
   }
 
   ProcessLoginAsync() {
+    //console.log("Props in logijn" , this.state);
     let username = this.state.username;
     let password = this.state.password;
     if (!username){
-      ToastAndroid.show("User Name Not Found",ToastAndroid.SHORT);
+      if(Platform.OS==="android"){
+        ToastAndroid.show("User Name Not Found",ToastAndroid.SHORT);
+      }else{
+        Alert.alert("Invalid Username","User Name Not Found")
+      }
     }
-    else if (!password){
-      ToastAndroid.show("Please Enter Password",ToastAndroid.SHORT);
+    if (!password){
+      if(Platform.OS==="android"){
+        ToastAndroid.show("Please Enter Password",ToastAndroid.SHORT);
+      }else{
+        Alert.alert("Invalid Password","Please Enter Password")
+      }
     }
     else{
     this.props.processLogin(username,password);
@@ -64,9 +71,11 @@ class LoginForm extends Component {
   componentDidUpdate(){
     if(this.props.loginDetails.inProcess !== true && this.props.loginDetails.isLoggedIn === true)
     {
-      //// TODO: GOTO My Products Page
-      ToastAndroid.show(this.props.loginDetails.msg, ToastAndroid.SHORT);
-      console.log("This is Props after successfull login" , this.props.loginDetails.data.owner_name)
+      //// TODO: GOTO Home Page
+      if(Platform.OS==="android"){
+        ToastAndroid.show(this.props.loginDetails.msg, ToastAndroid.SHORT);
+      }
+      //console.log("This is Props after successfull login" , this.props.loginDetails.data.owner_name)
       this.props.goToHomeScreen(this.props.loginDetails);
     }
     
@@ -95,9 +104,9 @@ class LoginForm extends Component {
             selectionColor="#fff"
             onSubmitEditing={()=> this.password.focus()}
             onChangeText={(username)=>{this.setState({username:username})}}
-          />
+          /> 
 
-          <TextInput style={styles.inputBox}
+           <TextInput style={styles.inputBox}
               underlineColorAndroid='rgba(0,0,0,0)'
               placeholder="Password"
               secureTextEntry={true}
@@ -118,6 +127,7 @@ class LoginForm extends Component {
     )
   }
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
 

@@ -5,7 +5,8 @@ import { login } from "./reducers/loginReducer";
 import { signup } from "./reducers/signupReducer";
 import { forgetPassword } from "./reducers/forgetPasswordReducer";
 import { logout } from "./reducers/logoutReducer";
-
+//import allReducers from './reducers/index.js';
+import { reducer as formReducer } from 'redux-form';
 
 export const ConfigureStore = () => {
   const store = createStore(
@@ -13,7 +14,8 @@ export const ConfigureStore = () => {
       login,
       signup,
       forgetPassword,
-      logout
+      logout,
+      form: formReducer
     }),
     applyMiddleware(thunk.default,logger)
   );

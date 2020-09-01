@@ -13,7 +13,10 @@ export const MainComponent = createAppContainer(createStackNavigator(
     Login: Login,
     SignUp:  Signup,
     ForgotPassword: ForgotPassword, 
-    Logout:Logout,
+    Logout:{screen:Logout,
+      navigationOptions: {
+        headerShown: false,
+    },}, 
     Main:{screen:Main,
       navigationOptions: {
         headerShown: false,

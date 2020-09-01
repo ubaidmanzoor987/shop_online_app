@@ -8,7 +8,6 @@ import { Product } from '../screens/Product';
 import {Icon} from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {Footer,Header,Container,Content,Right,Left,Button} from 'native-base';
-import {Logout} from '../screens/Logout';
 
 const HomeNavigator = createAppContainer(createStackNavigator({
   Home:{

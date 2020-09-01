@@ -1,20 +1,102 @@
 import React, { Component } from 'react';
-import {
-  ProgressBarAndroid,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView,
-  ToastAndroid,
-  Platform,
-  ActivityIndicator
-} from 'react-native';
+import {StyleSheet,Text,View,TouchableOpacity,TextInput,ToastAndroid,Platform,Alert} from 'react-native';
 import { connect } from 'react-redux';
 import { processSignUp } from '../redux/actions/signupActionCreator';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {Loader} from './LoadingComponent';
+import {Field, reduxForm,} from 'redux-form';
+
+const required = value => value ? undefined : ' Required' ;
+const maxLength = max => value =>
+  value && value.length > max ? `Must be ${max} characters or less` : undefined
+const maxLength15 = maxLength(15)
+const number = value => value && isNaN(Number(value)) ? 'Must be a number' : undefined
+const minValue = min => value =>
+  value && value.length < min ? `Must be at least ${min}` : undefined
+const minValue18 = minValue(18)
+const email = value =>
+  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
+  'Invalid email address' : undefined
+const tooOld = value =>
+  value && value > 65 ? 'You might be too old for this' : undefined
+const aol = value =>
+  value && /.+@aol\.com/.test(value) ?
+  'Really? You still use AOL for your email?' : undefined
+
+
+  const validate = (values, allValues) => {
+    const errors = {}
+    
+    if (!values.user_name) {
+      errors.user_name = 'Required'
+    } else if (values.user_name.length > 15) {
+      errors.username = 'Must be 15 characters or less'
+    }
+    
+    if (values.email) {
+      //errors.email = 'Required'
+     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+      errors.email = 'Invalid email address';
+     }
+    }
+    
+    if (!values.owner_name) {
+      errors.owner_name = 'Required'
+    } else if (values.owner_name.length > 15) {
+      errors.owner_name = 'Must be 15 characters or less'
+    }
+    
+    if (!values.shop_name) {
+      errors.shop_name = 'Required'
+    } else if (values.shop_name.length > 15) {
+      errors.shop_name = 'Must be 15 characters or less'
+    }
+    
+    if (!values.owner_phone_no) {
+      errors.owner_phone_no = 'Required'
+    } else if (values.owner_phone_no.length > 11) {
+      errors.owner_phone_no = 'Must be 11 characters'
+    }
+    else if (values.owner_phone_no.length < 11) {
+      errors.owner_phone_no = 'Must be 11 characters'
+    }
+
+    if (!values.address) {
+      errors.address = 'Required'
+    }
+
+    if (!values.password) {
+      errors.password = 'Required'
+    }
+
+    if(!values.confirm_password){
+      errors.confirm_password = "Required"
+    }else if (values.confirm_password !==values.password){
+      errors.confirm_password = "Password do not Match"
+    }
+
+
+    // } else if (isNaN(Number(values.age))) {
+    //   errors.age = 'Must be a number'
+    // } else if (Number(values.age) < 18) {
+    //   errors.age = 'Sorry, you must be at least 18 years old'
+    // }
+    return errors
+  }
+  
+  const warn = values => {
+    const warnings = {}
+    if (values.age < 19) {
+      warnings.age = 'Hmm, you seem a bit young...'
+    }
+    return warnings
+  }
+
+const passwordsMustMatch = (value, allValues) => 
+  value !== allValues.password ? 
+    'Passwords do not match' :
+     undefined
+
 const mapStateToProps = (state) => {
   return {
     signUpDetails: state.signup
@@ -27,12 +109,12 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export class SignUpForm extends Component {
+class SignUpForm1 extends Component {
 
 
   constructor(props)
   {
-    console.log("This is Sign Up Props" , props);
+    //console.log("This is Sign Up Props" , props);
     super(props);
     this.state={
         user_name:"",
@@ -43,114 +125,131 @@ export class SignUpForm extends Component {
         shop_phone_no2:"",
         address:"",
         password:"",
-        showFirstSection:true
+        confirm_password:"",
+        email:""
     };
   }
-
-  ProcessSignUpAsync() {
-    console.log("Process SignUp Asyn Called ", this.state);
-    this.props.processSignUp(this.state);
+  
+  renderInput = (field)=> {
+  const {meta:{touched,error}, label, secureTextEntry, maxLength, keyboardType, placeholder ,placeholderTextColor, input :{ onChange, ...restInput } , ...inputProps } = field;
+    var hasError= false;
+    if(error !== undefined){
+      hasError= true;
+    }
+    return( 
+      <View error= {hasError}>
+        <TextInput  
+          onChangeText = {onChange}
+          maxLength = {maxLength}
+          placeholder=  {placeholder}
+          keyboardType = {keyboardType}
+          secureTextEntry = {secureTextEntry}
+          label = {label}
+          placeholderTextColor = {placeholderTextColor}
+          {...restInput}
+          style = {styles.inputBox}
+          />
+        {touched ? hasError ? <Text style={{color:'red',fontSize:13,}}>{error}</Text> : null : null}
+      </View>
+    )
   }
 
-  shouldComponentUpdate() {
-    return true;
+  OnSubmit = (values) => {
+    //Alert.alert("Values", values);
+    console.log("These are values", values);
+    this.props.processSignUp(values);
+    
   }
+
+  componentDidUpdate() {
+    if(this.props.signUpDetails.inProcess !== true && this.props.signUpDetails.isSignedUp === true)
+    {
+      // Return TO Login After Successfull Signup
+      if(Platform.OS==="android"){
+        ToastAndroid.show(this.props.signUpDetails.msg, ToastAndroid.SHORT);
+      }
+      this.props.returnToLogin();
+    
+    }
+      }
   render() {
     console.log(this.props);
     let processingView = <View/>;
+    const { handleSubmit, pristine, reset, submitting } = this.props
     if(this.props.signUpDetails.inProcess === true)
     {
       processingView = <Loader msg="SigningUp...."/>
     }
-    else if(this.props.signUpDetails.inProcess !== true && this.props.signUpDetails.isSignedUp === true)
-    {
-      ToastAndroid.show(this.props.signUpDetails.msg, ToastAndroid.SHORT);
-      this.props.returnToLogin();
-    }
+    
     else if(this.props.signUpDetails.inProcess !== true && this.props.signUpDetails.isSignedUp === false){
-      ToastAndroid.show(this.props.signUpDetails.msg, ToastAndroid.SHORT);
+      
+      {Platform.OS==="android" ?  ToastAndroid.show(this.props.signUpDetails.msg, ToastAndroid.SHORT) : Alert.alert("Message", this.props.signUpDetails.msg) };
     }
     return(
       <KeyboardAwareScrollView style={styles.container}>
         {processingView}
-        <TextInput style={styles.inputBox}
-          underlineColorAndroid='rgba(0,0,0,0)'
-          placeholder="User Name"
-          placeholderTextColor = "#ffffff"
-          selectionColor="#fff"
-          keyboardType="default"
-          onSubmitEditing={()=> this.password.focus()}
-          onChangeText={(user_name) => this.setState({user_name})}
+        <Field name="user_name" component={this.renderInput} 
+            placeholder="User Name" placeholderTextColor = "#ffffff"
+            onChange={(user_name)=>{this.setState({user_name})}}
+          />
+        <Field name="email" component={this.renderInput} 
+          placeholder="Email" placeholderTextColor = "#ffffff"
+          onChange={(email)=>{this.setState({email})}}
+        
         />
-        <TextInput style={styles.inputBox}
-          underlineColorAndroid='rgba(0,0,0,0)'
-          placeholder="Owner Name"
-          placeholderTextColor = "#ffffff"
-          selectionColor="#fff"
-          keyboardType="default"
-          onSubmitEditing={()=> this.password.focus()}
-          onChangeText={(owner_name) => this.setState({owner_name})}
+        <Field name="owner_name" component={this.renderInput} 
+          placeholder="Owner Name" placeholderTextColor = "#ffffff"
+          onChange={(owner_name)=>{this.setState({owner_name})}}
+        
         />
-        <TextInput style={styles.inputBox}
-          underlineColorAndroid='rgba(0,0,0,0)'
-          placeholder="Shop Name"
-          placeholderTextColor = "#ffffff"
-          selectionColor="#fff"
-          keyboardType="default"
-          onSubmitEditing={()=> this.password.focus()}
-          onChangeText={(shop_name) => this.setState({shop_name})}
+        <Field name="shop_name" component={this.renderInput} 
+          placeholder="Shop Name" placeholderTextColor = "#ffffff"
+          onChange={(shop_name)=>{this.setState({shop_name})}}
+        
         />
-        <TextInput style={styles.inputBox}
-          underlineColorAndroid='rgba(0,0,0,0)'
-          placeholder="Owner Mobile No"
-          placeholderTextColor = "#ffffff"
-          selectionColor="#fff"
-          keyboardType="number-pad"
-          onSubmitEditing={()=> this.password.focus()}
-          onChangeText={(owner_phone_no) => this.setState({owner_phone_no})}
+        <Field name="owner_phone_no" component={this.renderInput} 
+          placeholder="Owner Mobile No" placeholderTextColor = "#ffffff"
+          onChange={(owner_phone_no)=>{this.setState({owner_phone_no})}}
+          keyboardType = "number-pad"
+        
         />
-        <TextInput style={styles.inputBox}
-          underlineColorAndroid='rgba(0,0,0,0)'
-          placeholder="Shop Phone No"
-          placeholderTextColor = "#ffffff"
-          selectionColor="#fff"
-          keyboardType="number-pad"
-          onSubmitEditing={()=> this.password.focus()}
-          onChangeText={(shop_phone_no1)=>this.setState({shop_phone_no1})}
+        <Field name="shopphoneno" component={this.renderInput} 
+          placeholder="Shop Phone No" placeholderTextColor = "#ffffff"
+          onChange={(shop_phone_no1)=>{this.setState({shop_phone_no1})}}
+          keyboardType = "number-pad"
+        
         />
-        <TextInput style={styles.inputBox}
-          underlineColorAndroid='rgba(0,0,0,0)'
-          placeholder="Address"
-          placeholderTextColor = "#ffffff"
-          selectionColor="#fff"
-          keyboardType="default"
-          onSubmitEditing={()=> this.password.focus()}
-          onChangeText={(address)=>this.setState({address})}
+        
+        <Field name="address" component={this.renderInput} 
+          placeholder="Address" placeholderTextColor = "#ffffff"
+          onChange={(address)=>{this.setState({address})}}
+          
         />
-        <TextInput style={styles.inputBox}
-          underlineColorAndroid='rgba(0,0,0,0)'
-          placeholder="Password"
+        
+        <Field name="password" component={this.renderInput} 
+          placeholder="Password" placeholderTextColor = "#ffffff"
+          onChange={(password)=>{this.setState({password})}}
           secureTextEntry={true}
-          placeholderTextColor = "#ffffff"
-          ref={(input) => this.password = input}
-          onChangeText={(password)=>this.setState({password})}
         />
-        <TextInput style={styles.inputBox}
-          underlineColorAndroid='rgba(0,0,0,0)'
-          placeholder="Confirm Password"
+
+        <Field name="confirm_password" component={this.renderInput} 
+          placeholder="Confirm Password" placeholderTextColor = "#ffffff"
+          onChange={(confirm_password)=>{this.setState({confirm_password})}}
           secureTextEntry={true}
-          placeholderTextColor = "#ffffff"
-          ref={(input) => this.password = input}
-          onChangeText={(password)=>this.setState({password})}
         />
+        
         <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText} onPress={()=>{this.ProcessSignUpAsync()}}>Sign Up</Text>
+            <Text style={styles.buttonText} onPress={handleSubmit(this.OnSubmit)}> Sign Up</Text>
         </TouchableOpacity>
         
       </KeyboardAwareScrollView>
     )
   }
 }
+const SignUpForm = reduxForm({
+  form: 'SignUpForm1',
+  validate
+})(SignUpForm1);
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpForm);
 

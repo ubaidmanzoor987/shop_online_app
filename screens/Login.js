@@ -11,7 +11,7 @@ export class Login extends Component {
   constructor(props)
   {
     super(props);
-    console.log("Tis is login props at start ", props);
+    //console.log("Tis is login props at start ", props);
   }
 
   static navigationOptions = {
