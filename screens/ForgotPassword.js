@@ -7,7 +7,7 @@ import {
   TextInput,
   KeyboardAvoidingView
 } from 'react-native';
-import { ForgotPasswordForm } from '../components/ForgotPasswordForm';
+//import { ForgotPasswordForm } from '../components/ForgotPasswordForm';
 
 
 
@@ -27,7 +27,7 @@ export class ForgotPassword extends Component {
   render() {
     return(
       <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-        <ForgotPasswordForm returnToLogin={()=>{this.props.navigation.goBack()}}/>
+        <Text>SAlam</Text>
       </KeyboardAvoidingView>
     )
   }

@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { processLogout } from '../redux/actions/logoutActionCreater';
 import {View,Text,TouchableOpacity,ToastAndroid, Platform} from 'react-native';
 import {Loader} from './LoadingComponent';
+
 const mapStateToProps = (state) => {
     return {
       logoutDetails: state.logout    };
-  }
+}
   
   const mapDispatchToProps = (dispatch)=>{
     return {
@@ -23,7 +24,6 @@ class LogOutComponent extends Component {
     constructor(props){
       global.processingView = <View/>;
       super(props)
-      //console.log("this is LogOutComponent Props", props);
     
     }
     componentDidUpdate(){

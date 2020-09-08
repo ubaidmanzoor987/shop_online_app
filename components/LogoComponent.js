@@ -5,6 +5,7 @@ import {
   View,
   Image
 } from 'react-native';
+import {baseUrl} from '../shared/ServerConf';
 
 export class Logo extends Component {
 	render(){

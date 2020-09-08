@@ -6,25 +6,25 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import {Loader} from './LoadingComponent';
 import {Field, reduxForm,} from 'redux-form';
 
-const required = value => value ? undefined : ' Required' ;
-const maxLength = max => value =>
-  value && value.length > max ? `Must be ${max} characters or less` : undefined
-const maxLength15 = maxLength(15)
-const number = value => value && isNaN(Number(value)) ? 'Must be a number' : undefined
-const minValue = min => value =>
-  value && value.length < min ? `Must be at least ${min}` : undefined
-const minValue18 = minValue(18)
-const email = value =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
-  'Invalid email address' : undefined
-const tooOld = value =>
-  value && value > 65 ? 'You might be too old for this' : undefined
-const aol = value =>
-  value && /.+@aol\.com/.test(value) ?
-  'Really? You still use AOL for your email?' : undefined
+// const required = value => value ? undefined : ' Required' ;
+// const maxLength = max => value =>
+//   value && value.length > max ? `Must be ${max} characters or less` : undefined
+// const maxLength15 = maxLength(15)
+// const number = value => value && isNaN(Number(value)) ? 'Must be a number' : undefined
+// const minValue = min => value =>
+//   value && value.length < min ? `Must be at least ${min}` : undefined
+// const minValue18 = minValue(18)
+// const email = value =>
+//   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ?
+//   'Invalid email address' : undefined
+// const tooOld = value =>
+//   value && value > 65 ? 'You might be too old for this' : undefined
+// const aol = value =>
+//   value && /.+@aol\.com/.test(value) ?
+//   'Really? You still use AOL for your email?' : undefined
 
 
-  const validate = (values, allValues) => {
+const validate = (values, allValues) => {
     const errors = {}
     
     if (!values.user_name) {
@@ -74,29 +74,9 @@ const aol = value =>
     }else if (values.confirm_password !==values.password){
       errors.confirm_password = "Password do not Match"
     }
-
-
-    // } else if (isNaN(Number(values.age))) {
-    //   errors.age = 'Must be a number'
-    // } else if (Number(values.age) < 18) {
-    //   errors.age = 'Sorry, you must be at least 18 years old'
-    // }
     return errors
-  }
+}
   
-  const warn = values => {
-    const warnings = {}
-    if (values.age < 19) {
-      warnings.age = 'Hmm, you seem a bit young...'
-    }
-    return warnings
-  }
-
-const passwordsMustMatch = (value, allValues) => 
-  value !== allValues.password ? 
-    'Passwords do not match' :
-     undefined
-
 const mapStateToProps = (state) => {
   return {
     signUpDetails: state.signup
@@ -114,7 +94,6 @@ class SignUpForm1 extends Component {
 
   constructor(props)
   {
-    //console.log("This is Sign Up Props" , props);
     super(props);
     this.state={
         user_name:"",
@@ -155,7 +134,6 @@ class SignUpForm1 extends Component {
   }
 
   OnSubmit = (values) => {
-    //Alert.alert("Values", values);
     console.log("These are values", values);
     this.props.processSignUp(values);
     
@@ -171,16 +149,14 @@ class SignUpForm1 extends Component {
       this.props.returnToLogin();
     
     }
-      }
+  }
   render() {
-    console.log(this.props);
     let processingView = <View/>;
-    const { handleSubmit, pristine, reset, submitting } = this.props
+    const { handleSubmit, pristine, reset, submitting } = this.props;
     if(this.props.signUpDetails.inProcess === true)
     {
       processingView = <Loader msg="SigningUp...."/>
     }
-    
     else if(this.props.signUpDetails.inProcess !== true && this.props.signUpDetails.isSignedUp === false){
       
       {Platform.OS==="android" ?  ToastAndroid.show(this.props.signUpDetails.msg, ToastAndroid.SHORT) : Alert.alert("Message", this.props.signUpDetails.msg) };
@@ -191,7 +167,7 @@ class SignUpForm1 extends Component {
         <Field name="user_name" component={this.renderInput} 
             placeholder="User Name" placeholderTextColor = "#ffffff"
             onChange={(user_name)=>{this.setState({user_name})}}
-          />
+        />
         <Field name="email" component={this.renderInput} 
           placeholder="Email" placeholderTextColor = "#ffffff"
           onChange={(email)=>{this.setState({email})}}

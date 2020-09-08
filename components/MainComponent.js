@@ -8,8 +8,7 @@ import {Logout} from '../screens/Logout';
 import { Signup } from '../screens/SignUp';
 import { Main } from './MainNavigator';
 
-export const MainComponent = createAppContainer(createStackNavigator(
-  {
+export const MainComponent = createAppContainer(createStackNavigator({
     Login: Login,
     SignUp:  Signup,
     ForgotPassword: ForgotPassword, 
@@ -24,5 +23,6 @@ export const MainComponent = createAppContainer(createStackNavigator(
   },
   {
     initialRouteName: 'Login'
-  }
+  },
+
 ));

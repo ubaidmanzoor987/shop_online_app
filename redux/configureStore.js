@@ -3,9 +3,9 @@ import * as thunk from 'redux-thunk';
 import  logger  from 'redux-logger';
 import { login } from "./reducers/loginReducer";
 import { signup } from "./reducers/signupReducer";
-import { forgetPassword } from "./reducers/forgetPasswordReducer";
+import { UpdatePassword } from "./reducers/UpdatePasswordReducer";
 import { logout } from "./reducers/logoutReducer";
-//import allReducers from './reducers/index.js';
+import {update_user_info} from "./reducers/UpdateUserInfoReducer";
 import { reducer as formReducer } from 'redux-form';
 
 export const ConfigureStore = () => {
@@ -13,9 +13,10 @@ export const ConfigureStore = () => {
     combineReducers({
       login,
       signup,
-      forgetPassword,
+      UpdatePassword,
       logout,
-      form: formReducer
+      form: formReducer,
+      update_user_info,
     }),
     applyMiddleware(thunk.default,logger)
   );

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, Button, View, TextInput, TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from 'react-native';
 import { Logo } from '../components/LogoComponent';
 import  LoginForm from '../components/LoginForm';
@@ -11,7 +12,6 @@ export class Login extends Component {
   constructor(props)
   {
     super(props);
-    //console.log("Tis is login props at start ", props);
   }
 
   static navigationOptions = {
@@ -32,7 +32,7 @@ export class Login extends Component {
         <LoginForm
         signUpPress={() => this.props.navigation.navigate('SignUp')}
         goToHomeScreen={(data) => this.props.navigation.navigate('Main',{data})}
-        forgetPasswordPress={() => this.props.navigation.navigate('ForgotPassword')} />
+        forgetPasswordPress={() => Alert.alert("Alert","This is under Development")} />
       </View >
     )
   }

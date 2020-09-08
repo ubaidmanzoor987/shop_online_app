@@ -1,73 +1,101 @@
 import { View, Platform, Text, ScrollView, Image, StyleSheet,ToastAndroid, Alert } from 'react-native';
 import React,{Component} from 'react';
-import { createDrawerNavigator,DrawerItems } from 'react-navigation-drawer';
+import { createDrawerNavigator,DrawerItems, } from 'react-navigation-drawer';
 import { createStackNavigator } from 'react-navigation-stack';
 import {createAppContainer, SafeAreaView} from 'react-navigation';
-import { Home } from '../screens/Home';
-import { Product } from '../screens/Product';
 import {Icon} from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {Footer,Header,Container,Content,Right,Left,Button} from 'native-base';
+import {Obj,IMAGE_PATH} from './Data';
+import UserSettingForm from './UserSettingForm'
+import AboutPictureEdit from './AboutPictureEdit';
+import UpdatePasswordForm from './UpdatePasswordForm';
+import { Home } from '../screens/Home';
+import { Product } from '../screens/Product';
+import User from '../screens/User';
 
 const HomeNavigator = createAppContainer(createStackNavigator({
   Home:{
     screen:Home,
     navigationOptions: ({ navigation }) => (
       {
-      headerLeft:()=><Icon name="menu" size={24} 
+      headerLeft:()=><Icon name="menu" size={24}
       color= 'white'
-      onPress={ () => navigation.toggleDrawer() } style={{paddingRight:25}} />,      
-    })  
+      onPress={ () => navigation.toggleDrawer() } style={{paddingRight:25}} />,
+    })
   },
-  
+
 },{
   initialRouteName:"Home",
 }));
+
 const ProductNavigator = createAppContainer(createStackNavigator({
   Product:{
     screen:Product,
     navigationOptions: ({ navigation }) => (
       {
-      headerLeft:()=><Icon name="menu" size={23} 
+      headerLeft:()=><Icon name="menu" size={23}
       color= 'white'
-      onPress={ () => navigation.toggleDrawer() }/>         
-    })  
+      onPress={ () => navigation.toggleDrawer() }/>
+    })
   },
-  
+
 },{
   initialRouteName:"Product",
 }));
 
+const SettingsNavigator = createAppContainer(createStackNavigator({
+  User:{
+    screen:User,
+    navigationOptions: ({ navigation }) => (
+      {
+      headerLeft:()=><Icon name="menu" size={23}
+      color= 'white'
+      onPress={ () => navigation.toggleDrawer() }/>
+    })
+  },
+  AboutPictureEdit:{
+    screen:AboutPictureEdit,
+    navigationOptions: ({ navigation }) => (
+      {
+      headerShown:false
+    })
+  },
+  UserSettingForm:UserSettingForm,
+  UpdatePasswordForm:UpdatePasswordForm
+
+},{
+  initialRouteName:"User",
+}));
 
 const CustomDrawerContentComponent = {
   initialRouteName: 'Home',
   drawerBackgroundColor: 'white',
   headerMode:'none',
-  contentComponent: (props) => { 
+  contentComponent: (props) => {
    return (
    <Container>
-     <Header style={styles.drawerHeader} androidStatusBarColor='black'>
-        <Button transparent onPress={()=>Alert.alert("this is touch")}>
-        <View>
-          <Image style={styles.drawerImage} source={require('../assets/logo.png')} />
+     <Header style={styles.drawerHeader} androidStatusBarColor='rgba(52, 87, 85,1)'>
+        <View style={{width:'30%'}}>
+          <Image style={styles.drawerImage} source={IMAGE_PATH === '../assets/logo.png' ? require('../assets/logo.png') : {uri:IMAGE_PATH }} /> 
         </View>
-        <View style={{paddingLeft:10}}>
-          <Text style={styles.drawerHeaderText} >{props.navigation.state.params.data.data.shop_name}</Text>
-          <Text style={styles.drawerHeaderText1} >{props.navigation.state.params.data.data.owner_phone_no}</Text>
+        <View style={{width:'60%'}}>
+          <Text style={styles.drawerHeaderText} >{Obj.shop_name}</Text>
+          <Text style={styles.drawerHeaderText1} >{Obj.owner_phone_no}</Text>
         </View>
-        </Button>
      </Header>
-        <ScrollView style={styles.container}> 
+        <ScrollView style={styles.container}>
           <SafeAreaView>
             <DrawerItems {...props} />
+
           </SafeAreaView>
         </ScrollView>
-     
+
      <Footer style={styles.footerContainer}>
         <TouchableOpacity style={styles.footerTouchable} onPress={()=> {props.navigation.navigate('Logout')}}>
           <Icon
           name='sign-out'
-          type='font-awesome'            
+          type='font-awesome'
           size={24}
           color="white"
           />
@@ -77,12 +105,11 @@ const CustomDrawerContentComponent = {
    </Container>
   )
   }
-  
+
 };
 
-export const Main = createAppContainer(createDrawerNavigator(
-  {
-    Home: 
+export const Main = createAppContainer(createDrawerNavigator({
+    Home:
         { screen:HomeNavigator ,
           navigationOptions: {
             title: 'Home',
@@ -90,23 +117,23 @@ export const Main = createAppContainer(createDrawerNavigator(
             drawerIcon: ({ tintColor, focused }) => (
               <Icon
                 name='home'
-                type='font-awesome'            
+                type='font-awesome'
                 size={24}
                 color={tintColor}
               />
             ),
           },
-    
+
         },
-    Product: 
+    Product:
     { screen:ProductNavigator ,
       navigationOptions: {
         title: 'Products',
         drawerLabel:'Products',
         drawerIcon: ({ tintColor, focused }) => (
           <Icon
-            name='home'
-            type='font-awesome'            
+            name='cart-plus'
+            type='font-awesome'
             size={24}
             color={tintColor}
           />
@@ -114,9 +141,25 @@ export const Main = createAppContainer(createDrawerNavigator(
       },
 
     },
-  },
+    Setting:{
+      screen:SettingsNavigator,
+      navigationOptions: {
+        title: 'Setting',
+        drawerLabel:'Setting',
+        drawerIcon: ({ tintColor, focused }) => (
+          <Icon
+            name='cog'
+            type='font-awesome'
+            size={24}
+            color={tintColor}
+          />
+        ),
+      },
+    }
+},
   CustomDrawerContentComponent
 ));
+
 
 const styles = StyleSheet.create({
   container: {
@@ -128,6 +171,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
+    width:'100%'
   },
   drawerHeaderText: {
     color: 'white',
@@ -144,7 +188,6 @@ const styles = StyleSheet.create({
     width: 70,
     height:70,
     borderRadius:50,
-    marginLeft:-60
   },
   footerContainer:{
       backgroundColor: 'rgba(52, 87, 85,1)',
@@ -155,4 +198,4 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     marginTop:15
   }
-}); 
+});

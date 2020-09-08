@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ProgressBarAndroid, StyleSheet, Text, View, TextInput, TouchableOpacity,
+import {StyleSheet, Text, View, TextInput, TouchableOpacity,
   ToastAndroid,
   KeyboardAvoidingView,
   Platform,
@@ -8,6 +8,7 @@ import { ProgressBarAndroid, StyleSheet, Text, View, TextInput, TouchableOpacity
 import { connect } from 'react-redux';
 import { processLogin } from '../redux/actions/loginActionCreator';
 import {Loader} from './LoadingComponent';
+import {SetValues,SetImage} from './Data';
 
 const mapStateToProps = (state) => {
   return {
@@ -19,16 +20,13 @@ const mapDispatchToProps = (dispatch)=>{
   return {
     processLogin: (username, password) =>
     {
-      console.log("dispatch process login");
       dispatch(processLogin(username, password));
     }
   }
 } 
+
 class LoginForm extends Component {
-
-
   constructor(props){
-    //console.log("props of login screen", props);
     super(props);
     this.state = {
       username:"",
@@ -38,7 +36,6 @@ class LoginForm extends Component {
   }
 
   ProcessLoginAsync() {
-    //console.log("Props in logijn" , this.state);
     let username = this.state.username;
     let password = this.state.password;
     if (!username){
@@ -48,7 +45,7 @@ class LoginForm extends Component {
         Alert.alert("Invalid Username","User Name Not Found")
       }
     }
-    if (!password){
+    else if (!password){
       if(Platform.OS==="android"){
         ToastAndroid.show("Please Enter Password",ToastAndroid.SHORT);
       }else{
@@ -61,28 +58,34 @@ class LoginForm extends Component {
   }
 
   componentDidMount(){
-    let username = this.state.username;
-    let password = this.state.password;
-    if(username !== null && username !== null && username != "" && password != "")
-    {
-      hit = this.props.processLogin(username,password);
-    }
+    // let username = this.state.username;
+    // let password = this.state.password;
+    // if(username !== null && username !== null && username != "" && password != "")
+    // {
+    //   hit = this.props.processLogin(username,password);
+    // }
   }
+
   componentDidUpdate(){
     if(this.props.loginDetails.inProcess !== true && this.props.loginDetails.isLoggedIn === true)
     {
-      //// TODO: GOTO Home Page
       if(Platform.OS==="android"){
         ToastAndroid.show(this.props.loginDetails.msg, ToastAndroid.SHORT);
       }
-      //console.log("This is Props after successfull login" , this.props.loginDetails.data.owner_name)
-      this.props.goToHomeScreen(this.props.loginDetails);
+      console.log("This is Props after successfull login" , this.props.loginDetails.data);
+      SetValues(this.props.loginDetails.data);
+      if(this.props.loginDetails.data.image === null){
+        SetImage('../assets/logo.png');
+      }
+      if (this.props.loginDetails.data.image !== null){
+        SetImage(this.props.loginDetails.data.image);
+      }
+      this.props.goToHomeScreen(this.props.loginDetails.data);
     }
     
   }
   
   render() {
-    console.log("Main" , this.props);
     let processingView = <View/>;
     if(this.props.loginDetails.inProcess === true)
     {

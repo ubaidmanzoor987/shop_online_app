@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Text,
   View,
-  TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView
 } from 'react-native';
 import SignUpForm from '../components/SignUpForm';
 

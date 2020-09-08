@@ -34,14 +34,6 @@ export class Loader extends Component {
           <View style={styles.activityIndicatorWrapper}>
             <ActivityIndicator  color='rgba(52, 87, 85,1)' />
             <Text style={{marginTop:-20}}>{this.props.msg}</Text>
-            {/* If you want to image set source here */}
-            {/* <Image
-              source={require('../assets/images/loader.gif')}
-              style={{ height: 80, width: 80 }}
-              resizeMode="contain"
-              resizeMethod="resize"
-            /> */}
-           
           </View>
         </View>
       </Modal>
