@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {connect} from 'react-redux';
+import ProductForm from '../components/ProductForm';
 
-export class Product extends Component {
+class Product extends Component {
 
   constructor(props)
   {
     super(props);
+    console.log("this si s s", this.props);
   }
 
   static navigationOptions = {
-    title: 'Products',
+    title: 'Add Products',
     headerStyle: {
       backgroundColor:'rgba(52, 87, 85,1)',
     },
@@ -24,11 +26,7 @@ export class Product extends Component {
   } 
   render() {
     return(
-      <View style={styles.container}>
-        <Text style = {styles.text}>
-          Salam Pakistan Zindabbad 
-        </Text>
-      </View>
+      <ProductForm navigation = {this.props.navigation} navigateToSearchable = {(details) => this.props.navigation.navigate("MySearchableDropDown",{details}) } />
     )
   }
 }

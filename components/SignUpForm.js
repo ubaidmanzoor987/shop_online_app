@@ -30,7 +30,7 @@ const validate = (values, allValues) => {
     if (!values.user_name) {
       errors.user_name = 'Required'
     } else if (values.user_name.length > 15) {
-      errors.username = 'Must be 15 characters or less'
+      errors.user_name = 'Must be 15 characters or less'
     }
     
     if (values.email) {
@@ -42,8 +42,8 @@ const validate = (values, allValues) => {
     
     if (!values.owner_name) {
       errors.owner_name = 'Required'
-    } else if (values.owner_name.length > 15) {
-      errors.owner_name = 'Must be 15 characters or less'
+    } else if (values.owner_name.length > 25) {
+      errors.owner_name = 'Must be 25 characters or less'
     }
     
     if (!values.shop_name) {
@@ -150,6 +150,7 @@ class SignUpForm1 extends Component {
     
     }
   }
+  
   render() {
     let processingView = <View/>;
     const { handleSubmit, pristine, reset, submitting } = this.props;

@@ -1,9 +1,11 @@
 import React from 'react';
 import { BlurView } from 'expo-blur';
 import { View, StyleSheet, Modal, TouchableWithoutFeedback } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export const MyModal = ({ children, visible, onRequestClose, onPressOverlay, }) => {
   return (
+     <KeyboardAwareScrollView>
      <Modal
       visible={visible}
       transparent
@@ -21,6 +23,7 @@ export const MyModal = ({ children, visible, onRequestClose, onPressOverlay, }) 
          {children}
        </View>
     </Modal>
+    </KeyboardAwareScrollView>
   );
 };
 

@@ -15,13 +15,17 @@ export default class AboutPicture extends Component {
     }
 
     componentDidMount(){
-        this.setState({image: IMAGE_PATH });
+      this.setState({image: IMAGE_PATH });
       const { navigation } = this.props;
-        this.focusListener = navigation.addListener('didFocus', () => {
-            this.setState({ image: IMAGE_PATH });
-         });
+      this.focusListener = navigation.addListener('didFocus', () => {
+          this.setState({ image: IMAGE_PATH });
+        });
     }
     
+    componentWillUnmount(){
+      this.focusListener.remove();
+    }
+
   
     render() {
       return(

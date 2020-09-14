@@ -6,7 +6,7 @@ import { Login } from '../screens/Login';
 import { ForgotPassword } from '../screens/ForgotPassword';
 import {Logout} from '../screens/Logout';
 import { Signup } from '../screens/SignUp';
-import { Main } from './MainNavigator';
+import MainComponentDrawer from './MainNavigator';
 
 export const MainComponent = createAppContainer(createStackNavigator({
     Login: Login,
@@ -16,7 +16,7 @@ export const MainComponent = createAppContainer(createStackNavigator({
       navigationOptions: {
         headerShown: false,
     },}, 
-    Main:{screen:Main,
+    Main:{screen:MainComponentDrawer,
       navigationOptions: {
         headerShown: false,
     },},         

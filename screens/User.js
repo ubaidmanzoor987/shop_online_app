@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, 
+import { StyleSheet, Text, View,TouchableOpacity 
 } from 'react-native';
 import  AboutPicture  from './AboutPicture';
 import {Icon} from 'react-native-elements';
@@ -25,36 +25,36 @@ export default class User extends Component {
               navigation = {this.props.navigation}
             />
             <View style={{marginTop:70}}>
-              <Button style={styles.PasswordTouchableOpacity} onPress={()=>{
+              <TouchableOpacity style={styles.PasswordTouchableOpacity} onPress={()=>{
                 this.props.navigation.navigate("UpdatePasswordForm")
               }}>
                 <View style={styles.PasswordTouchableOpacityView}>
                     <Text style={styles.PasswordTouchableOpacityText}>Change Password</Text>
                 </View>
-                <Right style={{marginRight:-5}}>
+                <Right style={{marginRight:10}}>
                     <Icon 
-                    reverse
-                    name = 'forward'
+                    name = 'chevron-right'
                     size = {24}
                     color = 'black'
+                    type = 'font-awesome'
                     />
                 </Right>
-              </Button> 
-              <Button style={styles.PasswordTouchableOpacity} onPress={()=>{
+              </TouchableOpacity> 
+              <TouchableOpacity style={styles.PasswordTouchableOpacity} onPress={()=>{
                 this.props.navigation.navigate("UserSettingForm")
               }}>
                 <View style={styles.PasswordTouchableOpacityView}>
                     <Text style={styles.PasswordTouchableOpacityText}>Personal Information </Text>
                 </View>
-                <Right style={{marginRight:-5}}>
+                <Right style={{marginRight:10}}>
                     <Icon 
-                    reverse
-                    name = 'forward'
+                    name = 'chevron-right'
                     size = {24}
                     color = 'black'
+                    type = 'font-awesome'
                     />
                 </Right>
-              </Button>
+              </TouchableOpacity>
             </View>
         </View>
       )

@@ -31,7 +31,7 @@ export class Login extends Component {
         <Logo />
         <LoginForm
         signUpPress={() => this.props.navigation.navigate('SignUp')}
-        goToHomeScreen={(data) => this.props.navigation.navigate('Main',{data})}
+        goToHomeScreen={(data) => this.props.navigation.navigate('Main')}
         forgetPasswordPress={() => Alert.alert("Alert","This is under Development")} />
       </View >
     )

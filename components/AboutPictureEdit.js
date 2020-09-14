@@ -1,5 +1,5 @@
 import React, { Component,useState } from 'react';
-import {StyleSheet, Text, View, Image, Platform
+import {StyleSheet, Text, View, Image, Platform,TouchableOpacity, Alert
 } from 'react-native';
 import { connect } from 'react-redux';
 import {Icon} from 'react-native-elements';
@@ -9,8 +9,8 @@ import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { processUpdateUserInfo } from '../redux/actions/UpdateUserInfoActionCreator';
-import {IMAGE_PATH,SetImage} from './Data';
-
+import {IMAGE_PATH,Obj,SetImage} from './Data';
+import {baseUrl} from '../shared/ServerConf'; 
 
 const mapStateToProps = (state) => {
   return {
@@ -32,7 +32,8 @@ class AboutPictureEdit extends Component{
     super(props);
     this.state={
       modalVisible:false,
-      image:''
+      image:'',
+      pic_uri:""
     }
   }
 
@@ -62,13 +63,20 @@ class AboutPictureEdit extends Component{
           quality:1,
           base64:true
       });
+    
       if (!capturedImage.cancelled) {
-        this.processImage(capturedImage.uri);
+        //console.log("This is Exception in Camera as" , capturedImage);
+        this.handleUploadImage(capturedImage.base64);
+        this.setState({modalVisible:false });
+        this.setState({image: capturedImage.uri});
+        SetImage(this.state.image);
       }
     }catch(E){
       console.log("This is Exception in Camera as" , E);
     }
   }
+
+  
 
   getImageFromGallery = async () =>{
     try{
@@ -81,14 +89,16 @@ class AboutPictureEdit extends Component{
           
       });
       if(!galleryImage.cancelled){
-          this.processImage(galleryImage.uri);
-
+        this.handleUploadImage(galleryImage.base64);
+        this.processImage(galleryImage.uri);
       }
     }catch(E){
       console.log("This is an Exception in gallery",  E);
     }
   }
 
+
+  
   processImage = async (imageUri) => {
     try{
       let processedImage = await ImageManipulator.manipulateAsync(
@@ -100,8 +110,8 @@ class AboutPictureEdit extends Component{
       );
       this.setState({modalVisible:false });
       this.setState({image: processedImage.uri});
+      //console.log("this is image" ,  this.state.image);
       SetImage(this.state.image);
-      //this.props.processUpdateUserInfo({shopkeeper_id:this.state.shopkeeper_id,image:this.state.image});
       
      }catch(E){
        console.log("This is an Excepition in ImageManipulator", E);
@@ -109,6 +119,33 @@ class AboutPictureEdit extends Component{
 
 
   }
+
+   handleUploadImage = async (photo) => {
+
+    const data = {'file_attachement':photo}
+
+    let res = await fetch(
+      baseUrl + "shopkeeper/upload_file",
+      {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers:{
+          'Content-Type': 'application/json',
+        }
+      }
+    );
+    if (res){
+      let responseJson = await res.json();
+      if (responseJson.status == 1) {
+        alert('Upload Successful');
+      }
+    }
+    else{
+      console.log("No response");
+    }
+    
+      
+}
 
   render(){
     return(
@@ -125,7 +162,7 @@ class AboutPictureEdit extends Component{
            <Icon name='ellipsis-v' 
             type='font-awesome' 
             color='white' 
-            size={20} 
+            size={25} 
            />
           </Button>
           
@@ -140,34 +177,26 @@ class AboutPictureEdit extends Component{
       <MyModal visible={this.state.modalVisible} onRequestClose={()=> this.setState({modalVisible:false})} onPressOverlay={()=> this.setState({modalVisible:false})}>
           <View style={styles.ModalViewOuter}>
               <Header androidStatusBarColor='rgba(52, 87, 85,1)' style={styles.ModalheaderStyle}>               
-                <View style={{alignContent:'center',justifyContent:'center'}}>
+                <View style={{justifyContent:'center'}}>
                   <Text style={styles.ModalHeaderText}>Choose From</Text>
                 </View>
                 <Right>
-                  <Icon name='cancel' color='white'  onPress={()=>{this.setState({modalVisible:false})}} />
-                </Right>
+                  <Button transparent style={{marginRight:-20}} onPress={()=>this.setState({modalVisible:false})}>
+                    <Icon name='cancel' size={30} color='white'  />
+                  </Button>
+                  </Right>
               </Header>
-              <View style={styles.ModalViewInner}>
-                <Button transparent style={styles.ButtonCamera} onPress={()=>this.getImageFromCamera()} > 
-                    <Icon 
-                    name = 'camera'
-                    size = {60}
-                    type = "font-awesome"
-                    color = 'rgba(52, 87, 85,1)'
-                    />
-                    <Text style={{paddingTop:15,fontSize:16}}>Camera</Text>
-                </Button>
-                <Button transparent style = {styles.ButtonGallery} onPress={()=>this.getImageFromGallery()}>
-                    <Icon 
-                    name = 'image'
-                    size = {60}
-                    type = "font-awesome"
-                    color = 'rgba(52, 87, 85,1)'
-                    
-                    />
-                    <Text style={{paddingTop:15,fontSize:16}}>Gallery</Text>
-                </Button>
-              </View>
+              <View style={{marginVertical:5}}>
+                <TouchableOpacity style={styles.MediaTouchableOpacity} onPress={()=>this.getImageFromCamera()} > 
+                    <Text style={{fontSize:16,fontWeight:'bold'}}>Take Image From Camera</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.MediaTouchableOpacity} onPress={()=>this.getImageFromGallery()}>
+                    <Text style={{fontSize:16,fontWeight:'bold'}}>Take Image From Photos</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.MediaTouchableOpacity} onPress={()=>this.setState({modalVisible:false})}>
+                    <Text style={{fontSize:16,fontWeight:'bold'}}>Cancel</Text>
+                </TouchableOpacity>
+              </View>  
           </View>
         </MyModal>
       </Container>
@@ -190,29 +219,7 @@ const styles = StyleSheet.create({
     headerView:{
       flexDirection:'row'
     },
-    ImageBOx:{
-      width:400,
-      height:170,
-      justifyContent:'center',
-      borderBottomColor:'grey',
-      borderBottomWidth:0.5
-    },
-    ImageTag: {
-      width: 400,
-      height:170,
-      opacity:0.2,
-      position:'absolute'
-    }, 
-    ViewBox: {
-      width:270,
-      marginVertical:5,
-      marginLeft:40,
-      height:30,
-      flexDirection:"row"
-    },
-    inputBox: {
-        fontSize:17,borderBottomWidth:1,borderBottomColor:'grey',width:230,marginVertical:5
-    },
+    
     TouchableOpacityImage:{
       borderBottomColor:'rgba(52, 87, 85,1)',
       borderBottomWidth:0.5,
@@ -225,15 +232,8 @@ const styles = StyleSheet.create({
         height:300,
         marginHorizontal:10
     },
-    touchableopacitystyle :{
-        marginVertical:8,
-        width:340,
-    },
-    textStyle:{
-        fontSize:18,paddingLeft:22
-    },
     ModalViewOuter:{
-      backgroundColor:'white',height:'35%',width:'90%'
+      backgroundColor:'white',height:'36%',width:'90%'
     },
     ModalheaderStyle:{
       backgroundColor:'rgba(52, 87, 85,1)',
@@ -243,21 +243,18 @@ const styles = StyleSheet.create({
       color:'white',fontWeight:'bold',fontSize:16
     },
     ModalViewInner:{
-      flexDirection:'row',marginVertical:20,justifyContent:'center'
+      flexDirection:'column',marginVertical:20,justifyContent:'center',alignItems:'center'
     },
-    ButtonCamera:{
-      flexDirection:'column'
-    },
-    ButtonGallery:{
-      paddingLeft:30,flexDirection:'column'
-    },
-    ButtonMoreAndUpdate:{
-      backgroundColor:'rgba(52, 87, 85,1)',
-      width:100,borderRadius:10,justifyContent:'center',alignItems:'center',
-      height:40
-    },
-    TextStyleOr:{
-      alignSelf:'center',marginHorizontal:5
+    
+    MediaTouchableOpacity:{
+      width:'100%',
+      marginTop:10,
+      backgroundColor:'white',
+      height:40,
+      opacity:0.9,
+      borderBottomWidth:1,
+      alignItems:'center',
+      justifyContent:'center'
     },
     
 

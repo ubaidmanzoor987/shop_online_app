@@ -172,8 +172,8 @@ class UserSettingForm extends Component {
                         <Text style={styles.textStyle}>Owner Name</Text>
                     </View>
                     <View style={styles.ViewBox}>
-                        <TouchableHighlight onPress={()=>this.setState({active_owner_name:true})} underlayColor={null}>
-                            {this.state.active_owner_name === false ? <Text style={{fontSize:16,paddingTop:5}}>{this.state.owner_name}</Text> :
+                        <TouchableOpacity onPress={()=>this.setState({active_owner_name:true})} >
+                            {this.state.active_owner_name === false ? <Text style={styles.txtinputBox}>{this.state.owner_name}</Text> :
                                 <View>
                                     <TextInput placeholder="Owner name" 
                                     value={this.state.owner_name} 
@@ -196,7 +196,7 @@ class UserSettingForm extends Component {
                                 </View>
                             }
                             
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                         <Right>
                             {this.state.active_owner_name === false ?
                             <Icon
@@ -237,8 +237,8 @@ class UserSettingForm extends Component {
                         <Text style={styles.textStyle}>Shop Name</Text>
                     </View>
                     <View style={styles.ViewBox}>
-                        <TouchableHighlight underlayColor={null} onPress={()=>this.setState({active_shop_name:true})}>
-                            {this.state.active_shop_name === false ? <Text style={{fontSize:16,paddingTop:5}}>{this.state.shop_name}</Text> :
+                        <TouchableOpacity underlayColor={null} onPress={()=>this.setState({active_shop_name:true})}>
+                            {this.state.active_shop_name === false ? <Text style={styles.txtinputBox}>{this.state.shop_name}</Text> :
                                 <View>
                                     <TextInput placeholder="Shop name" 
                                     value={this.state.shop_name} 
@@ -262,7 +262,7 @@ class UserSettingForm extends Component {
                                 </View>
                             }
                             
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                         <Right>
                             {this.state.active_shop_name === false ?
                             <Icon
@@ -307,8 +307,8 @@ class UserSettingForm extends Component {
                         <Text style={styles.textStyle}>Cell No</Text>
                     </View>
                     <View style={styles.ViewBox}>
-                      <TouchableHighlight underlayColor={null} onPress={()=>this.setState({active_owner_phone_no:true})}>
-                              {this.state.active_owner_phone_no === false ? <Text style={{fontSize:16,paddingTop:5}}>{this.state.owner_phone_no}</Text> :
+                      <TouchableOpacity underlayColor={null} onPress={()=>this.setState({active_owner_phone_no:true})}>
+                              {this.state.active_owner_phone_no === false ? <Text style={styles.txtinputBox}>{this.state.owner_phone_no}</Text> :
                                   <View>
                                       <TextInput placeholder="Phone Number" 
                                       value={this.state.owner_phone_no} 
@@ -329,7 +329,7 @@ class UserSettingForm extends Component {
                                   </View>
                               }
                               
-                      </TouchableHighlight>
+                      </TouchableOpacity>
                       <Right>
                             {this.state.active_owner_phone_no === false ?
                             <Icon
@@ -383,9 +383,9 @@ class UserSettingForm extends Component {
                         <Text style={styles.textStyle}>Email</Text>
                     </View>
                     <View style={styles.ViewBox}>
-                        <TouchableHighlight underlayColor={null} onPress={()=>this.setState({active_email:true})}>
+                        <TouchableOpacity underlayColor={null} onPress={()=>this.setState({active_email:true})}>
                             {this.state.active_email === false ? 
-                                <Text style={{fontSize:16,paddingTop:5}}>{this.state.email}</Text> 
+                                <Text style={styles.txtinputBox}>{this.state.email}</Text> 
                                 :
                                 <View>
                                     <TextInput placeholder="Email" 
@@ -404,7 +404,7 @@ class UserSettingForm extends Component {
                                 
                                 </View>
                             }
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                         <Right>
                             {this.state.active_email === false ?
                               <Icon
@@ -446,9 +446,9 @@ class UserSettingForm extends Component {
                         <Text style={styles.textStyle}>Shop Phone No 1</Text>
                     </View>
                     <View style={styles.ViewBox}>
-                        <TouchableHighlight onPress={()=>this.setState({active_shop_phone_no1:true})} underlayColor={null}>
+                        <TouchableOpacity onPress={()=>this.setState({active_shop_phone_no1:true})} underlayColor={null}>
                             {this.state.active_shop_phone_no1 === false ? 
-                                <Text style={{fontSize:16,paddingTop:5}}>{this.state.shop_phone_no1}</Text> 
+                                <Text style={styles.txtinputBox}>{this.state.shop_phone_no1}</Text> 
                                 :
                                 <View>
                                     <TextInput placeholder="Shop Phone No 1" 
@@ -466,7 +466,7 @@ class UserSettingForm extends Component {
                                 </View>
                             }
                             
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                         <Right>
                             {this.state.active_shop_phone_no1 === false ?
                               <Icon
@@ -508,9 +508,9 @@ class UserSettingForm extends Component {
                         <Text style={styles.textStyle}>Shop Phone No 2</Text>
                     </View>
                     <View style={styles.ViewBox}>
-                        <TouchableHighlight onPress={()=>this.setState({active_shop_phone_no2:true})} underlayColor={null}>
+                        <TouchableOpacity onPress={()=>this.setState({active_shop_phone_no2:true})} underlayColor={null}>
                             {this.state.active_shop_phone_no2 === false ? 
-                                <Text style={{fontSize:16,paddingTop:5}}>{this.state.shop_phone_no2}</Text> 
+                                <Text style={styles.txtinputBox}>{this.state.shop_phone_no2}</Text> 
                                 :
                                 <View>
                                     <TextInput placeholder="Shop Phone No 2" 
@@ -528,7 +528,7 @@ class UserSettingForm extends Component {
                                 </View>
                             }
                             
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                         <Right>
                             {this.state.active_shop_phone_no2 === false ?
                               <Icon
@@ -558,7 +558,7 @@ class UserSettingForm extends Component {
                         </Right>
                     </View>
                  </View> 
-                 <View style={styles.touchableopacitystyle1} >
+                  <View style={styles.touchableopacitystyle1} >
                     <View style={{flexDirection:'row'}}>
                         <Icon
                             name='home'
@@ -572,12 +572,15 @@ class UserSettingForm extends Component {
                     <View style={styles.ViewBox1}>
                         <Left>
                             {this.state.active_address === false ? 
-                              <TextInput editable = {false} 
-                              value={this.state.address}   
-                              style={styles.inputBox1}
-                              numberOfLines = {6}
-                              multiline = {true}
+                              <TouchableOpacity style={styles.txtinputBox} onPress={()=>this.setState({active_address:true})}>
+                                  <TextInput editable = {false} 
+                                  value={this.state.address}   
+                                  style={styles.inputBox1}
+                                  numberOfLines = {6}
+                                  multiline = {true}
+                                
                               />
+                              </TouchableOpacity>
                               :
                               <View>
                                 <TextInput placeholder="Address" 
@@ -664,6 +667,9 @@ const styles = StyleSheet.create({
     },
     inputBox: {
         fontSize:17,borderBottomWidth:1,borderBottomColor:'grey',width:230,marginVertical:5
+    },
+    txtinputBox: {
+      fontSize:17,width:230,marginVertical:5
     },
     inputBox1: {
       fontSize:17,textAlignVertical: "top"

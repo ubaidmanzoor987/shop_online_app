@@ -6,22 +6,38 @@ import {createAppContainer, SafeAreaView} from 'react-navigation';
 import {Icon} from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {Footer,Header,Container,Content,Right,Left,Button} from 'native-base';
-import {Obj,IMAGE_PATH} from './Data';
+import {Obj,IMAGE_PATH,changesdetect,SetChangesDetect} from './Data';
 import UserSettingForm from './UserSettingForm'
 import AboutPictureEdit from './AboutPictureEdit';
 import UpdatePasswordForm from './UpdatePasswordForm';
 import { Home } from '../screens/Home';
-import { Product } from '../screens/Product';
+import Product from '../screens/Product';
 import User from '../screens/User';
+import Brands from '../screens/Brands';
+import AddBrands from './BrandsComponent/AddBrands';
+import CustomizeBrand from './BrandsComponent/CustomizeBrand';
+import MySearchableDropDown from './SearchableDropDown';
+import { connect } from 'react-redux';
+
+
+const mapStateToProps = (state) => {
+  return {
+  }
+}
 
 const HomeNavigator = createAppContainer(createStackNavigator({
   Home:{
     screen:Home,
     navigationOptions: ({ navigation }) => (
       {
-      headerLeft:()=><Icon name="menu" size={24}
-      color= 'white'
-      onPress={ () => navigation.toggleDrawer() } style={{paddingRight:25}} />,
+      headerLeft:()=><Button style={{marginLeft:10}} transparent onPress={ () => navigation.toggleDrawer() }>
+        <Icon 
+          name="menu" 
+          size={24}
+          color= 'white'
+          style={{paddingRight:25}} 
+        />
+      </Button>,
     })
   },
 
@@ -34,14 +50,42 @@ const ProductNavigator = createAppContainer(createStackNavigator({
     screen:Product,
     navigationOptions: ({ navigation }) => (
       {
-      headerLeft:()=><Icon name="menu" size={23}
-      color= 'white'
-      onPress={ () => navigation.toggleDrawer() }/>
+      headerLeft:()=><Button style={{marginLeft:10}} transparent onPress={ () => navigation.toggleDrawer() }>
+        <Icon 
+          name="menu" 
+          size={24}
+          color= 'white'
+          style={{paddingRight:25}} 
+        />
+      </Button>,
     })
   },
+  MySearchableDropDown:MySearchableDropDown
 
 },{
   initialRouteName:"Product",
+}));
+
+const BrandNavigator = createAppContainer(createStackNavigator({
+  Brands:{
+    screen:Brands,
+    navigationOptions: ({ navigation }) => (
+      {
+      headerLeft:()=><Button style={{marginLeft:10}} transparent onPress={ () => navigation.toggleDrawer() }>
+        <Icon 
+          name="menu" 
+          size={24}
+          color= 'white'
+          style={{paddingRight:25}} 
+        />
+      </Button>,
+    })
+  },
+  AddBrands:AddBrands,
+  CustomizeBrand:CustomizeBrand
+
+},{
+  initialRouteName:"Brands",
 }));
 
 const SettingsNavigator = createAppContainer(createStackNavigator({
@@ -49,9 +93,14 @@ const SettingsNavigator = createAppContainer(createStackNavigator({
     screen:User,
     navigationOptions: ({ navigation }) => (
       {
-      headerLeft:()=><Icon name="menu" size={23}
-      color= 'white'
-      onPress={ () => navigation.toggleDrawer() }/>
+      headerLeft:()=><Button style={{marginLeft:10}} transparent onPress={ () => navigation.toggleDrawer() }>
+        <Icon 
+          name="menu" 
+          size={24}
+          color= 'white'
+          style={{paddingRight:25}} 
+        />
+      </Button>,
     })
   },
   AboutPictureEdit:{
@@ -92,7 +141,7 @@ const CustomDrawerContentComponent = {
         </ScrollView>
 
      <Footer style={styles.footerContainer}>
-        <TouchableOpacity style={styles.footerTouchable} onPress={()=> {props.navigation.navigate('Logout')}}>
+        <TouchableOpacity style={styles.footerTouchable} onPress={()=> {props.navigation.navigate("Logout")}}>
           <Icon
           name='sign-out'
           type='font-awesome'
@@ -108,28 +157,44 @@ const CustomDrawerContentComponent = {
 
 };
 
-export const Main = createAppContainer(createDrawerNavigator({
-    Home:
-        { screen:HomeNavigator ,
-          navigationOptions: {
-            title: 'Home',
-            drawerLabel:'Home',
-            drawerIcon: ({ tintColor, focused }) => (
-              <Icon
-                name='home'
-                type='font-awesome'
-                size={24}
-                color={tintColor}
-              />
-            ),
-          },
+export default MainComponentDrawer = createAppContainer(createDrawerNavigator({
+  Home:{ 
+    screen:HomeNavigator ,
+    navigationOptions: {
+      title: 'Home',
+      drawerLabel:'Home',
+      drawerIcon: ({ tintColor, focused }) => (
+        <Icon
+          name='home'
+          type='font-awesome'
+          size={24}
+          color={tintColor}
+        />
+      ),
+    },
 
-        },
+  },
     Product:
     { screen:ProductNavigator ,
       navigationOptions: {
         title: 'Products',
-        drawerLabel:'Products',
+        drawerLabel:'Add Products',
+        drawerIcon: ({ tintColor, focused }) => (
+          <Icon
+            name='cart-plus'
+            type='font-awesome'
+            size={24}
+            color={tintColor}
+          />
+        ),
+      },
+
+    },
+    Brand:
+    { screen:BrandNavigator ,
+      navigationOptions: {
+        title: 'Brands',
+        drawerLabel:'Brands',
         drawerIcon: ({ tintColor, focused }) => (
           <Icon
             name='cart-plus'
@@ -159,6 +224,36 @@ export const Main = createAppContainer(createDrawerNavigator({
 },
   CustomDrawerContentComponent
 ));
+
+class MainComponentDrawer1 extends Component {
+  constructor(props){
+    super(props)
+    console.log("these are props in main ", this.props);
+  }
+  componentDidMount(){
+     
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('didFocus', () => {
+      if (changesdetect === "initialize" || changesdetect === "add" || changesdetect === "update" || changesdetect === "delete"){
+        this.props.fetchBrands({shopkeeper_id:Obj.shopkeeper_id});
+          SetChangesDetect("fail");
+      }
+      });
+  }
+  
+  componentWillUnmount(){
+    this.focusListener.remove();
+  }
+  render(){
+    return (
+      <View style={{flex:1}}>
+        <MainNavigator navigation1={this.props.navigation}/>
+       </View>
+    )
+  }
+}
+
+//export default connect(mapStateToProps,mapDispatchToProps)(MainComponentDrawer);
 
 
 const styles = StyleSheet.create({
