@@ -122,29 +122,28 @@ class AboutPictureEdit extends Component{
 
    handleUploadImage = async (photo) => {
 
-    const data = {'file_attachement':photo}
-
-    let res = await fetch(
-      baseUrl + "shopkeeper/upload_file",
-      {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers:{
-          'Content-Type': 'application/json',
+    const data = {'file_attachement':photo, 'shopkeeper_id': Obj.shopkeeper_id}
+    console.log(data);
+    let res;
+    try{
+      res = await fetch(
+        baseUrl + "shopkeeper/update_user_picture",
+        {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers:{
+            'Content-Type': 'application/json',
+          }
         }
-      }
-    );
-    if (res){
+      );
       let responseJson = await res.json();
       if (responseJson.status == 1) {
         alert('Upload Successful');
       }
+    } catch(ex) {
+      console.log(ex);
     }
-    else{
-      console.log("No response");
-    }
-    
-      
+   
 }
 
   render(){
