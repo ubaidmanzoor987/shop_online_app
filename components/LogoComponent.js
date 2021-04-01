@@ -13,7 +13,7 @@ export class Logo extends Component {
 			<View style={styles.container}>
         <Image
           style={{width: 100, height: 100}}
-          source={require('../assets/logo.png')}
+          source={require('../assets/logoo.jpg')}
         />
       <Text style={styles.logoText}>Welcome to Shop Online.</Text>
   		</View>
